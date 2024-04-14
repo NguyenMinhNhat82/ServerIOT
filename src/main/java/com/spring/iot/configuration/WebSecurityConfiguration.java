@@ -29,7 +29,8 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/authenticate", "/sign-up","/hello","/checkusername/",
                         "/ws/**","/expirationOfToken/**","/refreshtoken/**","/generateOtp"
-                        ,"/token-sign-up","/generateOtp","/validateOtp","/admin-authenticate","/api/user/test").permitAll()
+                        ,"/token-sign-up","/generateOtp","/validateOtp","/admin-authenticate","/api/user/test"
+                ,"/sensor-value/export/excel").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/api/**","/data")
                 .authenticated()

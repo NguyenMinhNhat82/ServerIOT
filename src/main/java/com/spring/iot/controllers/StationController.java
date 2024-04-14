@@ -1,13 +1,12 @@
 package com.spring.iot.controllers;
 
 
+import com.spring.iot.dto.MinMaxResponse;
 import com.spring.iot.entities.Sensor;
 import com.spring.iot.entities.SensorValue;
 import com.spring.iot.entities.Station;
-import com.spring.iot.services.SensorService;
-import com.spring.iot.services.SensorValueService;
-import com.spring.iot.services.StationService;
-import com.spring.iot.services.UserService;
+import com.spring.iot.services.*;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -89,51 +92,57 @@ public class StationController {
     ResponseEntity<List<SensorValue>> getvalueSensor1m(@PathVariable String nameSensor){
         return new ResponseEntity<>(sensorValueService.DataSensorMonth(nameSensor),HttpStatus.OK);
     }
-    @GetMapping("/api/max-value-sensor-1h/{nameSensor}")
-    @CrossOrigin
-    ResponseEntity<Integer> getMaxvalueSensor1h(@PathVariable String nameSensor){
-        return new ResponseEntity<>(sensorValueService.MaxSensorHour(nameSensor),HttpStatus.OK);
-    }
-    @GetMapping("/api/max-value-sensor-1d/{nameSensor}")
-    @CrossOrigin
-    ResponseEntity<Integer> getMaxvalueSensor1d(@PathVariable String nameSensor){
-        return new ResponseEntity<>(sensorValueService.MaxSensorDay(nameSensor),HttpStatus.OK);
-    }
-    @GetMapping("/api/max-value-sensor-1w/{nameSensor}")
-    @CrossOrigin
-    ResponseEntity<Integer> getMaxvalueSensor1w(@PathVariable String nameSensor){
-        return new ResponseEntity<>(sensorValueService.MaxSensorWeek(nameSensor),HttpStatus.OK);
-    }
-    @GetMapping("/api/max-value-sensor-1m/{nameSensor}")
-    @CrossOrigin
-    ResponseEntity<Integer> getMaxvalueSensor1m(@PathVariable String nameSensor){
-        return new ResponseEntity<>(sensorValueService.MaxSensorMonth(nameSensor),HttpStatus.OK);
-    }
-    @GetMapping("/api/min-value-sensor-1h/{nameSensor}")
-    @CrossOrigin
-    ResponseEntity<Integer> getMinvalueSensor1h(@PathVariable String nameSensor){
-        return new ResponseEntity<>(sensorValueService.MinSensorHour(nameSensor),HttpStatus.OK);
-    }
-    @GetMapping("/api/min-value-sensor-1d/{nameSensor}")
-    @CrossOrigin
-    ResponseEntity<Integer> getMinvalueSensor1d(@PathVariable String nameSensor){
-        return new ResponseEntity<>(sensorValueService.MinSensorDay(nameSensor),HttpStatus.OK);
-    }
-    @GetMapping("/api/min-value-sensor-1w/{nameSensor}")
-    @CrossOrigin
-    ResponseEntity<Integer> getMinvalueSensor1w(@PathVariable String nameSensor){
-        return new ResponseEntity<>(sensorValueService.MinSensorWeek(nameSensor),HttpStatus.OK);
-    }
-    @GetMapping("/api/min-value-sensor-1m/{nameSensor}")
-    @CrossOrigin
-    ResponseEntity<Integer> getMinvalueSensor1m(@PathVariable String nameSensor){
-        return new ResponseEntity<>(sensorValueService.MinSensorMonth(nameSensor),HttpStatus.OK);
-    }
+//    @GetMapping("/api/max-value-sensor-1h/{nameSensor}")
+//    @CrossOrigin
+//    ResponseEntity<Integer> getMaxvalueSensor1h(@PathVariable String nameSensor){
+//        return new ResponseEntity<>(sensorValueService.MaxSensorHour(nameSensor),HttpStatus.OK);
+//    }
+//    @GetMapping("/api/max-value-sensor-1d/{nameSensor}")
+//    @CrossOrigin
+//    ResponseEntity<Integer> getMaxvalueSensor1d(@PathVariable String nameSensor){
+//        return new ResponseEntity<>(sensorValueService.MaxSensorDay(nameSensor),HttpStatus.OK);
+//    }
+//    @GetMapping("/api/max-value-sensor-1w/{nameSensor}")
+//    @CrossOrigin
+//    ResponseEntity<Integer> getMaxvalueSensor1w(@PathVariable String nameSensor){
+//        return new ResponseEntity<>(sensorValueService.MaxSensorWeek(nameSensor),HttpStatus.OK);
+//    }
+//    @GetMapping("/api/max-value-sensor-1m/{nameSensor}")
+//    @CrossOrigin
+//    ResponseEntity<Integer> getMaxvalueSensor1m(@PathVariable String nameSensor){
+//        return new ResponseEntity<>(sensorValueService.MaxSensorMonth(nameSensor),HttpStatus.OK);
+//    }
+//    @GetMapping("/api/min-value-sensor-1h/{nameSensor}")
+//    @CrossOrigin
+//    ResponseEntity<Integer> getMinvalueSensor1h(@PathVariable String nameSensor){
+//        return new ResponseEntity<>(sensorValueService.MinSensorHour(nameSensor),HttpStatus.OK);
+//    }
+//    @GetMapping("/api/min-value-sensor-1d/{nameSensor}")
+//    @CrossOrigin
+//    ResponseEntity<Integer> getMinvalueSensor1d(@PathVariable String nameSensor){
+//        return new ResponseEntity<>(sensorValueService.MinSensorDay(nameSensor),HttpStatus.OK);
+//    }
+//    @GetMapping("/api/min-value-sensor-1w/{nameSensor}")
+//    @CrossOrigin
+//    ResponseEntity<Integer> getMinvalueSensor1w(@PathVariable String nameSensor){
+//        return new ResponseEntity<>(sensorValueService.MinSensorWeek(nameSensor),HttpStatus.OK);
+//    }
+//    @GetMapping("/api/min-value-sensor-1m/{nameSensor}")
+//    @CrossOrigin
+//    ResponseEntity<Integer> getMinvalueSensor1m(@PathVariable String nameSensor){
+//        return new ResponseEntity<>(sensorValueService.MinSensorMonth(nameSensor),HttpStatus.OK);
+//    }
 //
 //    @GetMapping("/api/current/{id}")
 //    @CrossOrigin
 //    ResponseEntity<Station> currentStatusStation(@PathVariable String id){
 //        return  new ResponseEntity<>(stationService.findStattionByID(id),HttpStatus.OK);
 //    }
+
+    @GetMapping("/api/min-max-value/{nameSensor}")
+    ResponseEntity<MinMaxResponse> getMinMaxBySensor(@PathVariable("nameSensor") String nameSensor){
+        return new ResponseEntity<>(sensorValueService.minMaxResponse(nameSensor), HttpStatus.OK);
+    }
+
 
 }

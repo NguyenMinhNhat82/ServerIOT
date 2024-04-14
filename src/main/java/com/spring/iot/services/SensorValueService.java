@@ -1,5 +1,6 @@
 package com.spring.iot.services;
 
+import com.spring.iot.dto.MinMaxResponse;
 import com.spring.iot.entities.Sensor;
 import com.spring.iot.entities.SensorValue;
 import com.spring.iot.repositories.SensorRepository;
@@ -44,6 +45,9 @@ public class SensorValueService {
         }
         return list;
     }
+    public List<SensorValue> sensorValueList(){
+        return sensorValueRepository.findAll();
+    }
 
     public List<SensorValue> getCurrentListOfRelay(String station, String value){
         List<SensorValue> arr = new ArrayList<>();
@@ -82,6 +86,22 @@ public class SensorValueService {
         }
         return newlist;
     }
+
+
+    public List<SensorValue> DataAllSensorInDay ()
+    {
+        List<SensorValue> newlist = new ArrayList<>();
+        LocalDateTime currentTime = LocalDateTime.now();
+        List<SensorValue> value = sensorValueRepository.findAll();
+        for (SensorValue s : value) {
+            LocalDateTime timeUpdate = s.getTimeUpdate();
+            long secondsDifference = ChronoUnit.SECONDS.between(timeUpdate, currentTime);
+            if (secondsDifference <= 86400) {
+                newlist.add(s);
+            }
+        }
+        return newlist;
+    }
     public List<SensorValue> DataSensorWeek (String idsensor)
     {
         List<SensorValue> newlist = new ArrayList<>();
@@ -111,116 +131,131 @@ public class SensorValueService {
         return newlist;
     }
 
-    public int MaxSensorHour (String idsensor)
+    public String MaxSensorHour (String idsensor)
     {
-        int max = 0;
+        Double max = 0.0;
         SensorValue value = new SensorValue();
         for (SensorValue s : DataSensorHour(idsensor))
         {
-            if (Integer.parseInt(s.getValue()) > max)
+            if (Double.parseDouble(s.getValue()) > max)
             {
-                max = Integer.parseInt(s.getValue());
+                max = Double.parseDouble(s.getValue());
             }
         }
 
-        return max;
+        return max.toString();
     }
-    public int MaxSensorDay (String idsensor)
+    public String MaxSensorDay (String idsensor)
     {
-        int max = 0;
+        Double max = 0.0;
         SensorValue value = new SensorValue();
         for (SensorValue s : DataSensorDay(idsensor))
         {
-            if (Integer.parseInt(s.getValue()) > max)
+            if (Double.parseDouble(s.getValue()) > max)
             {
-                max = Integer.parseInt(s.getValue());
+                max = Double.parseDouble(s.getValue());
             }
         }
 
-        return max;
+        return max.toString();
     }
-    public int MaxSensorWeek (String idsensor)
+    public String MaxSensorWeek (String idsensor)
     {
-        int max = 0;
+        Double max = 0.0;
         SensorValue value = new SensorValue();
         for (SensorValue s : DataSensorWeek(idsensor))
         {
-            if (Integer.parseInt(s.getValue()) > max)
+            if (Double.parseDouble(s.getValue()) > max)
             {
-                max = Integer.parseInt(s.getValue());
+                max = Double.parseDouble(s.getValue());
             }
         }
 
-        return max;
+        return max.toString();
     }
-    public int MaxSensorMonth (String idsensor)
+    public String MaxSensorMonth (String idsensor)
     {
-        int max = 0;
+        Double max = 0.0;
         SensorValue value = new SensorValue();
         for (SensorValue s : DataSensorMonth(idsensor))
         {
-            if (Integer.parseInt(s.getValue()) > max)
+            if (Double.parseDouble(s.getValue()) > max)
             {
-                max = Integer.parseInt(s.getValue());
+                max = Double.parseDouble(s.getValue());
             }
         }
 
-        return max;
+        return max.toString();
     }
-    public int MinSensorHour (String idsensor)
+    public String MinSensorHour (String idsensor)
     {
-        int min = 9999999;
+        Double min = 9999999.0;
         SensorValue value = new SensorValue();
         for (SensorValue s : DataSensorHour(idsensor))
         {
-            if (Integer.parseInt(s.getValue()) < min)
+            if (Double.parseDouble(s.getValue()) < min)
             {
-                min = Integer.parseInt(s.getValue());
+                min = Double.parseDouble(s.getValue());
             }
         }
 
-        return min;
+        return min.toString();
     }
-    public int MinSensorDay (String idsensor)
+    public String MinSensorDay (String idsensor)
     {
-        int min = 9999999;
+        Double min = 9999999.0;
         SensorValue value = new SensorValue();
         for (SensorValue s : DataSensorDay(idsensor))
         {
-            if (Integer.parseInt(s.getValue()) < min)
+            if (Double.parseDouble(s.getValue()) < min)
             {
-                min = Integer.parseInt(s.getValue());
+                min = Double.parseDouble(s.getValue());
             }
         }
 
-        return min;
+        return min.toString();
     }
-    public int MinSensorWeek (String idsensor)
+    public String  MinSensorWeek (String idsensor)
     {
-        int min = 9999999;
+        Double min = 9999999.0;
         SensorValue value = new SensorValue();
         for (SensorValue s : DataSensorWeek(idsensor))
         {
-            if (Integer.parseInt(s.getValue()) < min)
+            if (Double.parseDouble(s.getValue()) < min)
             {
-                min = Integer.parseInt(s.getValue());
+                min = Double.parseDouble(s.getValue());
             }
         }
 
-        return min;
+        return min.toString();
     }
-    public int MinSensorMonth (String idsensor)
+    public String MinSensorMonth (String idsensor)
     {
-        int min = 9999999;
+        Double min = 9999999.0;
         SensorValue value = new SensorValue();
         for (SensorValue s : DataSensorMonth(idsensor))
         {
-            if (Integer.parseInt(s.getValue()) < min)
+            if (Double.parseDouble(s.getValue()) < min)
             {
-                min = Integer.parseInt(s.getValue());
+                min = Double.parseDouble(s.getValue());
             }
         }
 
-        return min;
+        return min.toString();
     }
+
+    public MinMaxResponse minMaxResponse(String idSensor){
+        MinMaxResponse minMax = new MinMaxResponse();
+        minMax.setMax1h(this.MaxSensorHour(idSensor));
+        minMax.setMax1d(this.MaxSensorDay(idSensor));
+        minMax.setMax1w(this.MaxSensorWeek(idSensor));
+        minMax.setMax1m(this.MaxSensorMonth(idSensor));
+        minMax.setMin1h(this.MinSensorHour(idSensor));
+        minMax.setMin1d(this.MinSensorDay(idSensor));
+        minMax.setMin1w(this.MinSensorWeek(idSensor));
+        minMax.setMin1m(this.MinSensorMonth(idSensor));
+        return minMax;
+    }
+
+
 }

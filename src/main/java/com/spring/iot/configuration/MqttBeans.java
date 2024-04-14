@@ -2,6 +2,7 @@ package com.spring.iot.configuration;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.iot.dto.Status;
 import com.spring.iot.entities.Sensor;
 import com.spring.iot.entities.SensorValue;
 import com.spring.iot.entities.Station;
@@ -97,31 +98,14 @@ public class MqttBeans {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Calendar cal = Calendar.getInstance();
                 JSONArray myjson = null;
-//                List<List<Object>> data = new ArrayList<>();
-//                List<Object> list2 = new ArrayList<>();
-//                list2.add("ada");
-//                list2.add("111");
-//                data.add(list2);
-//                ArrayList<Object> data1 = new ArrayList<>(Arrays.asList("Source","DES"));
-//                try {
-//                    sheetService.writeSheet(data1,"A1","1_qkbqLKtL0Fk0pxWR5M_9H-0DUePUu4rRTd4hpN2piI");
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                } catch (GeneralSecurityException e) {
-//                    throw new RuntimeException(e);
-//                }
                 try {
                     myjson = new JSONArray( "["+message.getPayload().toString() +"]");
                     List<Station> listStationInJSON = new ArrayList<>();
                     for(int i =0 ; i < myjson.length();i++){
                         Map<String,Object> result =
                                 new ObjectMapper().readValue(myjson.get(0).toString(), HashMap.class);
-
                         Station getStation = stationService.findStattionByID(result.get("station_id").toString());
-                        if(getStation == null)
-                            getStation = new Station();
                         getStation.setName(result.get("station_name").toString());
-                        getStation.setId(result.get("station_id").toString());
                         getStation.setActive(true);
                         listStationInJSON.add(getStation);
                         Station station = stationService.addOrUpdate(getStation);
@@ -132,11 +116,6 @@ public class MqttBeans {
                         for(int j =0 ; j < sensor.size();j++){
                             Map<String,String> obj = new HashMap<>((Map) sensor.get(j)) ;
                             Sensor s = sensorService.findSensorByID(obj.get("id"));
-                            if(s == null) {
-                                s = new Sensor();
-                                s.setId(obj.get("id"));
-                                s.setStation(station);
-                            }
                             sensorService.addOrUpdate(s);
                             SensorValue sensorValue = new SensorValue(0,String.valueOf(obj.get("value")),
                                     LocalDateTime.now(),s);
@@ -144,21 +123,28 @@ public class MqttBeans {
                             sensorValueService.addOrUpdate(sensorValue);
                         }
                         stationService.setNonActiveForStation(listStationInJSON);
-                        sheetService.updateGoogleSheet();
+//                        sheetService.updateGoogleSheet();
+                        com.spring.iot.dto.Message m = new com.spring.iot.dto.Message("server", "client", message.getPayload().toString(), dateFormat.format(cal.getTime()), Status.MESSAGE);
+                        simpMessagingTemplate.convertAndSendToUser(m.getReceiverName(), "/private", m);
+                        sheetService.update();
+                        System.out.println(message.getPayload());
                     }
-                }catch (JSONException | GeneralSecurityException | IOException e){
+                }catch (JSONException | IOException e){
                     throw new RuntimeException(e);
-                }
-
+                } catch (GeneralSecurityException e) {
+                    throw new RuntimeException(e);
                 }
 
             }
 
-            ;
         }
 
+                ;
+    }
 
-        @Bean
+
+
+    @Bean
         public MessageChannel mqttOutboundChannel () {
             return new DirectChannel();
         }

@@ -16,6 +16,7 @@ public class StationService {
     public Station addOrUpdate(Station station){
         return stationRepository.save(station);
     }
+    public List<Station> getAll(){return stationRepository.findAll();}
 
     public Station findStattionByID(String id){
         return stationRepository.findStationById(id);
