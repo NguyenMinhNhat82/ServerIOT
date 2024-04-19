@@ -127,7 +127,7 @@ public class MqttBeans {
 //                        sheetService.updateGoogleSheet();
                         com.spring.iot.dto.Message m = new com.spring.iot.dto.Message("server", "client", message.getPayload().toString(), dateFormat.format(cal.getTime()), Status.MESSAGE);
                         simpMessagingTemplate.convertAndSendToUser(m.getReceiverName(), "/private", m);
-                        sheetService.update();
+//                        sheetService.update();
                         System.out.println(message.getPayload());
                     }
                 }catch (JSONException | IOException e){
