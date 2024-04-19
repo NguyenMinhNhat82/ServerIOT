@@ -132,6 +132,7 @@ public class MqttBeans {
                     }
                 }catch (JSONException | IOException e){
                     throw new RuntimeException(e);
+                }
 
             }
 
