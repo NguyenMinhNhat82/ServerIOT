@@ -94,7 +94,7 @@ public class MqttBeans {
         return new MessageHandler() {
             @Override
             public void handleMessage(Message<?> message) throws MessagingException {
-                System.out.println(message.getPayload());
+//                System.out.println(message.getPayload());
                 String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC).toString();
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Calendar cal = Calendar.getInstance();
@@ -131,6 +131,7 @@ public class MqttBeans {
                         System.out.println(message.getPayload());
                     }
                 }catch (JSONException | IOException e){
+                    System.out.println(e.getMessage());
                     throw new RuntimeException(e);
                 }
 
