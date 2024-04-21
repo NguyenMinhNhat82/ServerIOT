@@ -36,6 +36,7 @@ import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 
@@ -58,16 +59,23 @@ public class MqttBeans {
 
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
-        DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
-        MqttConnectOptions options = new MqttConnectOptions();
-        options.setServerURIs(new String[]{"tcp://mqttserver.tk:1883"});
-        options.setCleanSession(true);
-        options.setUserName("innovation");
-        options.setPassword("Innovation_RgPQAZoA5N".toCharArray());
-        options.setAutomaticReconnect(true);
-        options.setKeepAliveInterval(100);
-        factory.setConnectionOptions(options);
-        return factory;
+        try {
+            DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
+            MqttConnectOptions options = new MqttConnectOptions();
+            options.setServerURIs(new String[]{"tcp://mqttserver.tk:1883"});
+            options.setCleanSession(true);
+            options.setUserName("innovation");
+            options.setPassword("Innovation_RgPQAZoA5N".toCharArray());
+            options.setAutomaticReconnect(true);
+            options.setKeepAliveInterval(100);
+            factory.setConnectionOptions(options);
+            return factory;
+
+        }catch (Exception exception){
+            System.out.println("mqttClientFactory:\n"+ exception.getMessage());
+            return null;
+        }
+
     }
 
     @Bean
@@ -77,14 +85,20 @@ public class MqttBeans {
 
     @Bean
     public MessageProducer inbound() {
-        MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn",
-                mqttClientFactory(), "/innovation/airmonitoring/NBIOTs");
+        try {
+            MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn",
+                    mqttClientFactory(), "/innovation/airmonitoring/NBIOTs");
 
-        adapter.setCompletionTimeout(5000);
-        adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(2);
-        adapter.setOutputChannel(mqttInputChannel());
-        return adapter;
+            adapter.setCompletionTimeout(5000);
+            adapter.setConverter(new DefaultPahoMessageConverter());
+            adapter.setQos(2);
+            adapter.setOutputChannel(mqttInputChannel());
+            return adapter;
+        }catch (Exception exception){
+            System.out.println("inbound:\n"+exception.getMessage());
+            return null;
+        }
+
     }
 
 
@@ -118,8 +132,10 @@ public class MqttBeans {
                             Map<String,String> obj = new HashMap<>((Map) sensor.get(j)) ;
                             Sensor s = sensorService.findSensorByID(obj.get("id"));
                             sensorService.addOrUpdate(s);
+
+                            ZoneId zid = ZoneId.of("Asia/Saigon");
                             SensorValue sensorValue = new SensorValue(0,String.valueOf(obj.get("value")),
-                                    LocalDateTime.now(),s);
+                                    LocalDateTime.now(zid),s);
 //                            Sensor s = new Sensor(obj.get("id"), String.valueOf(obj.get("value")),station);
                             sensorValueService.addOrUpdate(sensorValue);
                         }
@@ -131,7 +147,7 @@ public class MqttBeans {
                         System.out.println(message.getPayload());
                     }
                 }catch (JSONException | IOException e){
-                    System.out.println(e.getMessage());
+                    System.out.println("MessageHandler:\n"+ e.getMessage());
                     throw new RuntimeException(e);
                 }
 
@@ -152,12 +168,18 @@ public class MqttBeans {
         @Bean
         @ServiceActivator(inputChannel = "mqttOutboundChannel")
         public MessageHandler mqttOutbound () {
+        try {
             //clientId is generated using a random number
             MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler("serverOut", mqttClientFactory());
             messageHandler.setAsync(true);
             messageHandler.setDefaultTopic("/innovation/airmonitoring/NBIOTs");
             messageHandler.setDefaultRetained(false);
             return messageHandler;
+        }catch (Exception exception){
+            System.out.println("mqttOutbound:\n"+exception.getMessage());
+            return null;
+        }
+
         }
 
     }
