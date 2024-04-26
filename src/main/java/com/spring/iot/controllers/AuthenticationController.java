@@ -90,6 +90,11 @@ public class AuthenticationController {
         return  new ResponseEntity<>(pstFormat.format(date), HttpStatus.OK);
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "test";
+    }
+
 
 
 
