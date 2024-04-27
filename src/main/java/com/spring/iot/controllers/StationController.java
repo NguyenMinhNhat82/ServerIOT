@@ -1,6 +1,7 @@
 package com.spring.iot.controllers;
 
 
+import com.spring.iot.dto.MinMaxAllSensorResponse;
 import com.spring.iot.dto.MinMaxResponse;
 import com.spring.iot.entities.Sensor;
 import com.spring.iot.entities.SensorValue;
@@ -10,10 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -72,7 +70,7 @@ public class StationController {
         return new ResponseEntity<>(sensorValueService.getCurrentListOfRelay(station,value), HttpStatus.OK);
     }
 
-    @GetMapping("/api/value-sensor-1h/{nameSensor}")
+    @GetMapping("/api/value-s   ensor-1h/{nameSensor}")
     @CrossOrigin
     ResponseEntity<List<SensorValue>> getvalueSensor1h(@PathVariable String nameSensor){
         return new ResponseEntity<>(sensorValueService.DataSensorHour(nameSensor),HttpStatus.OK);
@@ -142,6 +140,14 @@ public class StationController {
     @GetMapping("/api/min-max-value/{nameSensor}")
     ResponseEntity<MinMaxResponse> getMinMaxBySensor(@PathVariable("nameSensor") String nameSensor){
         return new ResponseEntity<>(sensorValueService.minMaxResponse(nameSensor), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/all-min-max/{stationId}")
+    ResponseEntity<MinMaxAllSensorResponse> getMinMax(
+            @PathVariable("stationId") String station,
+            @RequestBody Map<String,String> req
+    ) throws Exception {
+        return  new ResponseEntity<>(sensorValueService.getMinMaxOfSenSortInStation(req.get("date"),station), HttpStatus.OK);
     }
 
 

@@ -1,10 +1,13 @@
 package com.spring.iot.services;
 
+import com.spring.iot.dto.MinMaxAllSensorResponse;
 import com.spring.iot.dto.MinMaxResponse;
 import com.spring.iot.entities.Sensor;
 import com.spring.iot.entities.SensorValue;
+import com.spring.iot.entities.Station;
 import com.spring.iot.repositories.SensorRepository;
 import com.spring.iot.repositories.SensorValueRepository;
+import com.spring.iot.repositories.StationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -20,6 +24,9 @@ public class SensorValueService {
     private SensorValueRepository sensorValueRepository;
     @Autowired
     private SensorRepository sensorRepository;
+
+    @Autowired
+    private StationRepository  stationRepository;
     public SensorValue addOrUpdate(SensorValue sensorValue){
         List<SensorValue> sensorValueList = sensorValueRepository.getListValueBySensor(sensorValue.getSensor().getId());
         if(sensorValueList.size() == 0)
@@ -256,6 +263,38 @@ public class SensorValueService {
         minMax.setMin1m(this.MinSensorMonth(idSensor));
         return minMax;
     }
+
+    public MinMaxAllSensorResponse getMinMaxOfSenSortInStation(String date, String station) throws Exception {
+        Station station1 = stationRepository.findStationById(station);
+        String year = date.split("-")[0];
+        String month = date.split("-")[1];
+        String day = date.split("-")[2];
+        if(station1 == null)
+            throw new RuntimeException("Cant find station");
+        List<Sensor> sensors = sensorRepository.getSensorByStation_Id(station);
+        List<MinMaxAllSensorResponse.SensorMinMax> sensorMinMaxes = new ArrayList<>();
+        for(Sensor s : sensors){
+
+            if(!s.getId().contains("Relay")){
+                List<MinMaxAllSensorResponse.ValueHour> valueHours = new ArrayList<>();
+                for(int i = 1 ; i<=24 ; i++){
+                    List<SensorValue> sensorValueList  = sensorValueRepository.findAllSensorValueByDate(day,month,year,station,s.getId(),String.valueOf(i));
+                    if(sensorValueList.size() !=0) {
+                        Double min = sensorValueList.stream().mapToDouble(v -> Double.parseDouble(v.getValue())).min().orElseThrow(Exception::new);
+                        Double max = sensorValueList.stream().mapToDouble(v -> Double.parseDouble(v.getValue())).max().orElseThrow(Exception::new);
+                        MinMaxAllSensorResponse.ValueHour sensorMinMax = new MinMaxAllSensorResponse.ValueHour(String.valueOf(i), min.toString(), max.toString());
+                        valueHours.add(sensorMinMax);
+                    }
+                    else valueHours.add(new MinMaxAllSensorResponse.ValueHour(String.valueOf(i),"",""));
+                }
+                MinMaxAllSensorResponse.SensorMinMax minMax = new MinMaxAllSensorResponse.SensorMinMax(s.getId(),valueHours);
+                sensorMinMaxes.add(minMax);
+            }
+        }
+        return new MinMaxAllSensorResponse(sensorMinMaxes);
+    }
+
+
 
 
 }

@@ -72,7 +72,6 @@ public class MqttBeans {
             options.setKeepAliveInterval(100);
             factory.setConnectionOptions(options);
             return factory;
-
         }catch (Exception exception){
             System.out.println("mqttClientFactory:\n"+ exception.getMessage());
             return null;
@@ -90,7 +89,6 @@ public class MqttBeans {
         try {
             MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn",
                     mqttClientFactory(), "/innovation/airmonitoring/NBIOTs");
-
             adapter.setCompletionTimeout(5000);
             adapter.setConverter(new DefaultPahoMessageConverter());
             adapter.setQos(2);

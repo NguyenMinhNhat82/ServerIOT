@@ -23,12 +23,11 @@ public class IotApplication {
     }
 
     @Scheduled(fixedRate = 120000)
-    public synchronized void sendEmailSchedule() {
+    public synchronized void keepServerAlive() {
         RestTemplate restTemplate = new RestTemplate();
         String url =  "https://serveriot-1.onrender.com/test";
         ResponseEntity<String> response
                 = restTemplate.getForEntity(url , String.class);
-        System.out.println(response);
     }
 
 }

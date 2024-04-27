@@ -14,4 +14,20 @@ public interface SensorValueRepository extends JpaRepository<SensorValue,Integer
     List<SensorValue> getSensorValuesBySensor_Id(String id);
     List<SensorValue> findFirstBySensor_IdOrderByTimeUpdateDesc(String id);
 
+
+
+    @Query("SELECT sv from SensorValue  sv where" +
+            " year(sv.timeUpdate) = :year and" +
+            " month(sv.timeUpdate) = :month and" +
+            " day(sv.timeUpdate) = :day " +
+            "and sv.sensor.station.id = :idStation" +
+            " and sv.sensor.id  = :idSensor and hour(sv.timeUpdate) =:hour")
+    List<SensorValue> findAllSensorValueByDate(
+            @Param("day") String date,
+            @Param("month") String month,
+            @Param("year") String year ,
+            @Param("idStation") String idStation,
+            @Param("idSensor") String idSensor,
+            @Param("hour") String hour);
+
 }
