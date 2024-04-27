@@ -277,7 +277,7 @@ public class SensorValueService {
 
             if(!s.getId().contains("Relay")){
                 List<MinMaxAllSensorResponse.ValueHour> valueHours = new ArrayList<>();
-                for(int i = 1 ; i<=24 ; i++){
+                for(int i = 0 ; i<=23 ; i++){
                     List<SensorValue> sensorValueList  = sensorValueRepository.findAllSensorValueByDate(day,month,year,station,s.getId(),String.valueOf(i));
                     if(sensorValueList.size() !=0) {
                         Double min = sensorValueList.stream().mapToDouble(v -> Double.parseDouble(v.getValue())).min().orElseThrow(Exception::new);
