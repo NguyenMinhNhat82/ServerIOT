@@ -70,7 +70,7 @@ public class StationController {
         return new ResponseEntity<>(sensorValueService.getCurrentListOfRelay(station,value), HttpStatus.OK);
     }
 
-    @GetMapping("/api/value-s   ensor-1h/{nameSensor}")
+    @GetMapping("/api/value-sensor-1h/{nameSensor}")
     @CrossOrigin
     ResponseEntity<List<SensorValue>> getvalueSensor1h(@PathVariable String nameSensor){
         return new ResponseEntity<>(sensorValueService.DataSensorHour(nameSensor),HttpStatus.OK);
