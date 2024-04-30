@@ -17,6 +17,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SensorValueService {
@@ -263,6 +264,9 @@ public class SensorValueService {
         minMax.setMin1m(this.MinSensorMonth(idSensor));
         return minMax;
     }
+    Double toDouble(String s){
+        return Double.parseDouble(s);
+    }
 
     public MinMaxAllSensorResponse getMinMaxOfSenSortInStation(String date, String station) throws Exception {
         Station station1 = stationRepository.findStationById(station);
@@ -280,12 +284,15 @@ public class SensorValueService {
                 for(int i = 0 ; i<=23 ; i++){
                     List<SensorValue> sensorValueList  = sensorValueRepository.findAllSensorValueByDate(day,month,year,station,s.getId(),String.valueOf(i));
                     if(sensorValueList.size() !=0) {
-                        Double min = sensorValueList.stream().mapToDouble(v -> Double.parseDouble(v.getValue())).min().orElseThrow(Exception::new);
-                        Double max = sensorValueList.stream().mapToDouble(v -> Double.parseDouble(v.getValue())).max().orElseThrow(Exception::new);
-                        MinMaxAllSensorResponse.ValueHour sensorMinMax = new MinMaxAllSensorResponse.ValueHour(String.valueOf(i), min.toString(), max.toString());
+                       SensorValue minSensor = sensorValueList.stream()
+                                .min((a,b) -> toDouble(a.getValue()).compareTo(toDouble(b.getValue()))).orElseThrow(() -> new RuntimeException("error"));
+                        SensorValue maxSensor = sensorValueList.stream()
+                                .max((a,b) -> toDouble(a.getValue()).compareTo(toDouble(b.getValue()))).orElseThrow(() -> new RuntimeException("error"));;
+
+                        MinMaxAllSensorResponse.ValueHour sensorMinMax = new MinMaxAllSensorResponse.ValueHour(String.valueOf(i), minSensor.getValue(), maxSensor.getValue(), maxSensor.getTimeUpdate(), minSensor.getTimeUpdate());
                         valueHours.add(sensorMinMax);
                     }
-                    else valueHours.add(new MinMaxAllSensorResponse.ValueHour(String.valueOf(i),"",""));
+                    else valueHours.add(new MinMaxAllSensorResponse.ValueHour(String.valueOf(i),"","", null, null));
                 }
                 MinMaxAllSensorResponse.SensorMinMax minMax = new MinMaxAllSensorResponse.SensorMinMax(s.getId(),valueHours);
                 sensorMinMaxes.add(minMax);

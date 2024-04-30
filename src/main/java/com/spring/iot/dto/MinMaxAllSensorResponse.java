@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -30,6 +31,8 @@ public class MinMaxAllSensorResponse {
         private String hour;
         private String min;
         private String max;
+        private LocalDateTime minAt;
+        private LocalDateTime maxAt;
     }
 
 }

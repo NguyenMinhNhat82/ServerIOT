@@ -24,6 +24,8 @@ public class User implements UserDetails {
 
     private  String role;
 
+    private String avatar;
+
     public User() {
     }
 
@@ -64,4 +66,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
 }
