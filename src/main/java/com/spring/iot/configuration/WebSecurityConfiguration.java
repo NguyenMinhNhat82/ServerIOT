@@ -27,7 +27,7 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/Callback","/authenticate", "/sign-up","/hello","/checkusername/",
+                .requestMatchers("https://serveriot-0z1m.onrender.com/Callback","/authenticate", "/sign-up","/hello","/checkusername/",
                         "/ws/**","/expirationOfToken/**","/refreshtoken/**","/generateOtp"
                         ,"/token-sign-up","/generateOtp","/validateOtp","/admin-authenticate","/api/user/test"
                 ,"/sensor-value/export/excel", "/test", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
