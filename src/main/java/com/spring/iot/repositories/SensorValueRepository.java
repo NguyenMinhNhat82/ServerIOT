@@ -11,6 +11,10 @@ public interface SensorValueRepository extends JpaRepository<SensorValue,Integer
     @Query(nativeQuery = true,value = "SELECT * FROM public.sensor_value where sensor_id = :id\n" +
             "ORDER BY time_update ASC ")
     List<SensorValue> getListValueBySensor(@Param("id") String id);
+
+    @Query(nativeQuery = true,value = "SELECT * FROM public.sensor_value where sensor_id = :id\n" +
+            "ORDER BY time_update DESC ")
+    List<SensorValue> getListValueBySensorCurrent(@Param("id") String id);
     List<SensorValue> getSensorValuesBySensor_Id(String id);
     List<SensorValue> findFirstBySensor_IdOrderByTimeUpdateDesc(String id);
 

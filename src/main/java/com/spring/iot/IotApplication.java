@@ -26,6 +26,9 @@ public class IotApplication {
     public synchronized void keepServerAlive() {
         RestTemplate restTemplate = new RestTemplate();
         String url =  "https://serveriot-1.onrender.com/test";
+        //http://localhost:9000
+
+        //https://serveriot-1.onrender.com/test
         ResponseEntity<String> response
                 = restTemplate.getForEntity(url , String.class);
     }
