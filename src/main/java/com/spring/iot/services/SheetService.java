@@ -1,8 +1,10 @@
 package com.spring.iot.services;
 
 
+import ch.qos.logback.classic.net.server.ServerSocketReceiver;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -15,6 +17,7 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
+import com.spring.iot.dto.VerifyReceiver;
 import com.spring.iot.entities.SensorValue;
 import com.spring.iot.entities.Station;
 import com.spring.iot.repositories.StationRepository;
@@ -52,15 +55,14 @@ public class SheetService {
         }
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-            LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).setHost("127.0.0.1")
-                .build();
+        VerifyReceiver receiver = new VerifyReceiver.Builder().setHost("serveriot-0z1m.onrender.com").setPort(8888).build();
+
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 

@@ -22,15 +22,15 @@ public class IotApplication {
 
     }
 
-    @Scheduled(fixedRate = 120000)
-    public synchronized void keepServerAlive() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url =  "https://serveriot-0z1m.onrender.com/test";
-        //http://localhost:9000
-
-        //https://serveriot-1.onrender.com/test
-        ResponseEntity<String> response
-                = restTemplate.getForEntity(url , String.class);
-    }
+//    @Scheduled(fixedRate = 120000)
+//    public synchronized void keepServerAlive() {
+//        RestTemplate restTemplate = new RestTemplate();
+//        String url =  "https://serveriot-0z1m.onrender.com/test";
+//        //http://localhost:9000
+//
+//        //https://serveriot-1.onrender.com/test
+//        ResponseEntity<String> response
+//                = restTemplate.getForEntity(url , String.class);
+//    }
 
 }
