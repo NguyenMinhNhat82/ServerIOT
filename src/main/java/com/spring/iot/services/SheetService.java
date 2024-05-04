@@ -61,7 +61,7 @@ public class SheetService {
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        VerifyReceiver receiver = new VerifyReceiver.Builder().setHost("serveriot-0z1m.onrender.com").setPort(8888).build();
+        VerifyReceiver receiver = new VerifyReceiver.Builder().setHost("serveriot-0z1m.onrender.com").setCallbackPath("/test").build();
 
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
