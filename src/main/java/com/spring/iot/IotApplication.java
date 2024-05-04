@@ -1,5 +1,7 @@
 package com.spring.iot;
 
+import com.spring.iot.services.SheetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,21 +18,24 @@ import java.util.Date;
 @SpringBootApplication
 @EnableScheduling
 public class IotApplication {
+    @Autowired
+    SheetService sheetService;
 
     public static void main(String[] args) throws IOException, GeneralSecurityException {
         SpringApplication.run(IotApplication.class, args);
 
     }
 
-//    @Scheduled(fixedRate = 120000)
-//    public synchronized void keepServerAlive() {
-//        RestTemplate restTemplate = new RestTemplate();
-//        String url =  "https://serveriot-0z1m.onrender.com/test";
-//        //http://localhost:9000
-//
-//        //https://serveriot-1.onrender.com/test
-//        ResponseEntity<String> response
-//                = restTemplate.getForEntity(url , String.class);
-//    }
+    @Scheduled(fixedRate = 1200000)
+    public synchronized void keepServerAlive() throws GeneralSecurityException, IOException {
+//        sheetService.update();
+        RestTemplate restTemplate = new RestTemplate();
+        String url =  "https://serveriot-0z1m.onrender.com/test";
+        //http://localhost:9000
+
+        //https://serveriot-1.onrender.com/test
+        ResponseEntity<String> response
+                = restTemplate.getForEntity(url , String.class);
+    }
 
 }
