@@ -53,15 +53,14 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
     }
 
     public String getRedirectUri() throws IOException {
-        this.server = HttpsServer.create(new InetSocketAddress(this.port != -1 ? this.port : this.findOpenPort()), 0);
-        this.server.createContext(this.callbackPath, new CallbackHandler());
-        this.server.setExecutor((Executor)null);
-
         try {
+            this.server = HttpsServer.create(new InetSocketAddress(this.port != -1 ? this.port : this.findOpenPort()), 0);
+            this.server.createContext(this.callbackPath, new CallbackHandler());
             this.server.start();
             this.port = this.server.getAddress().getPort();
             System.out.println(server.getAddress().getAddress().getHostName());
         } catch (Exception var3) {
+            System.out.println(var3.getMessage());
             Throwables.propagateIfPossible(var3);
             throw new IOException(var3);
         }
