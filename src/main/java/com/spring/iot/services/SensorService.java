@@ -38,5 +38,8 @@ public class SensorService {
         list.removeAll(listRemove);
         return list;
     }
+    public  List<Sensor> getAll(){
+        return sensorRepository.findAll();
+    }
 
 }

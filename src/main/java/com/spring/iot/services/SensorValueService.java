@@ -9,7 +9,6 @@ import com.spring.iot.entities.Station;
 import com.spring.iot.repositories.SensorRepository;
 import com.spring.iot.repositories.SensorValueRepository;
 import com.spring.iot.repositories.StationRepository;
-import org.apache.xmlbeans.impl.store.Cur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

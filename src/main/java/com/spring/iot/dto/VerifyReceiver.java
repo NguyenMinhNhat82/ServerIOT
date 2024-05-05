@@ -7,6 +7,7 @@ package com.spring.iot.dto;
 
 import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
 import com.google.api.client.util.Throwables;
+import com.sun.net.httpserver.HttpsServer;
 import com.sun.net.httpserver.*;
 
 import javax.net.ssl.SSLContext;
@@ -58,14 +59,13 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
             this.server.createContext(this.callbackPath, new CallbackHandler());
             this.server.start();
             this.port = this.server.getAddress().getPort();
-            System.out.println(server.getAddress().getAddress().getHostName());
         } catch (Exception var3) {
             System.out.println(var3.getMessage());
             Throwables.propagateIfPossible(var3);
             throw new IOException(var3);
         }
 
-        return "https://" + this.getHost() + ":" + port + this.callbackPath;
+        return "https://" + this.getHost() + this.callbackPath;
     }
 
     private int findOpenPort() {
@@ -103,11 +103,12 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
 
     public String waitForCode() throws IOException {
         this.waitUnlessSignaled.acquireUninterruptibly();
-        if (this.error != null) {
-            throw new IOException("User authorization failed (" + this.error + ")");
-        } else {
-            return this.code;
-        }
+//        if (this.error != null) {
+//            throw new IOException("User authorization failed (" + this.error + ")");
+//        } else {
+//            return this.code;
+//        }
+        return this.code;
     }
 
     public void stop() throws IOException {

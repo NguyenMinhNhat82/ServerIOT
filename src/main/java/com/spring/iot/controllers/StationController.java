@@ -105,6 +105,25 @@ public class StationController {
         return  new ResponseEntity<>(sensorValueService.getMinMaxOfSenSortInStation(req.get("date"),station), HttpStatus.OK);
     }
 
+    @GetMapping("/export")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=parameters_of_the_soil_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<SensorValue> listValue = sensorValueService.DataAllSensorInDay();
+        List<Station> stations = stationService.getAll();
+        List<Sensor> sensors = sensorService.getAll();
+
+        ExcelService excelExporter = new ExcelService(listValue,stations,sensors);
+
+        excelExporter.export(response);
+    }
+
 
 
 }

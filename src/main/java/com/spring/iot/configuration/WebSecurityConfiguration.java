@@ -37,7 +37,7 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests().requestMatchers("/api/**","/data")
                 .authenticated()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/user/**", "/api/all-min-max/{stationId}").hasAnyAuthority("ADMIN")
+                .authorizeHttpRequests().requestMatchers("/api/user/**", "/api/all-min-max/{stationId}", "/export").hasAnyAuthority("ADMIN")
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
