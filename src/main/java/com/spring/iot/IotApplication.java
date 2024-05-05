@@ -37,4 +37,5 @@ public class IotApplication {
                 = restTemplate.getForEntity(url , String.class);
     }
 
+
 }
