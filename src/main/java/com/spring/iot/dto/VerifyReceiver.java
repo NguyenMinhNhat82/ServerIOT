@@ -142,22 +142,23 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
         }
 
         public void handle(HttpExchange httpExchange) throws IOException {
-            if (VerifyReceiver.this.callbackPath.equals(httpExchange.getRequestURI().getPath())) {
+            HttpsExchange httpsExchange = (HttpsExchange) httpExchange;
+            if (VerifyReceiver.this.callbackPath.equals(httpsExchange.getRequestURI().getPath())) {
                 new StringBuilder();
 
                 try {
-                    Map<String, String> parms = this.queryToMap(httpExchange.getRequestURI().getQuery());
+                    Map<String, String> parms = this.queryToMap(httpsExchange.getRequestURI().getQuery());
                     VerifyReceiver.this.error = (String)parms.get("error");
                     VerifyReceiver.this.code = (String)parms.get("code");
-                    Headers respHeaders = httpExchange.getResponseHeaders();
+                    Headers respHeaders = httpsExchange.getResponseHeaders();
                     if (VerifyReceiver.this.error == null && VerifyReceiver.this.successLandingPageUrl != null) {
                         respHeaders.add("Location", VerifyReceiver.this.successLandingPageUrl);
-                        httpExchange.sendResponseHeaders(302, -1L);
+                        httpsExchange.sendResponseHeaders(302, -1L);
                     } else if (VerifyReceiver.this.error != null && VerifyReceiver.this.failureLandingPageUrl != null) {
                         respHeaders.add("Location", VerifyReceiver.this.failureLandingPageUrl);
-                        httpExchange.sendResponseHeaders(302, -1L);
+                        httpsExchange.sendResponseHeaders(302, -1L);
                     } else {
-                        this.writeLandingHtml(httpExchange, respHeaders);
+                        this.writeLandingHtml(httpsExchange, respHeaders);
                     }
 
                     httpExchange.close();
@@ -189,7 +190,8 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
         }
 
         private void writeLandingHtml(HttpExchange exchange, Headers headers) throws IOException {
-            OutputStream os = exchange.getResponseBody();
+            HttpsExchange httpsExchange = (HttpsExchange) exchange;
+            OutputStream os = httpsExchange.getResponseBody();
             Throwable var4 = null;
 
             try {
