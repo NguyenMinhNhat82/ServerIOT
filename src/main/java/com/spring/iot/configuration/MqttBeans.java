@@ -141,7 +141,7 @@ public class MqttBeans {
                             sensorValueService.addOrUpdate(sensorValue);
                         }
                         stationService.setNonActiveForStation(listStationInJSON);
-                        sheetService.update();
+//                        sheetService.update();
                         com.spring.iot.dto.Message m = new com.spring.iot.dto.Message("server", "client", message.getPayload().toString(), dateFormat.format(cal.getTime()), Status.MESSAGE);
                         simpMessagingTemplate.convertAndSendToUser(m.getReceiverName(), "/private", m);
 //                        sheetService.update();
@@ -150,9 +150,10 @@ public class MqttBeans {
                 }catch (JSONException | IOException e){
                     System.out.println("MessageHandler:\n"+ e.getMessage());
                     throw new RuntimeException(e);
-                } catch (GeneralSecurityException e) {
-                    throw new RuntimeException(e);
                 }
+//                catch (GeneralSecurityException e) {
+//                    throw new RuntimeException(e);
+//                }
 
             }
 

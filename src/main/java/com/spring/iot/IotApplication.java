@@ -28,14 +28,14 @@ public class IotApplication {
 
     @Scheduled(fixedRate = 1200000)
     public synchronized void keepServerAlive() throws GeneralSecurityException, IOException {
-//        sheetService.update();
-        RestTemplate restTemplate = new RestTemplate();
-        String url =  "https://serveriot-0z1m.onrender.com/test";
-        //http://localhost:9000
-
-        //https://serveriot-1.onrender.com/test
-        ResponseEntity<String> response
-                = restTemplate.getForEntity(url , String.class);
+        sheetService.update();
+//        RestTemplate restTemplate = new RestTemplate();
+//        String url =  "https://serveriot-0z1m.onrender.com/test";
+//        //http://localhost:9000
+//
+//        //https://serveriot-1.onrender.com/test
+//        ResponseEntity<String> response
+//                = restTemplate.getForEntity(url , String.class);
     }
 
 }

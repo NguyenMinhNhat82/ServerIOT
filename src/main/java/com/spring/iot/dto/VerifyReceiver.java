@@ -7,11 +7,8 @@ package com.spring.iot.dto;
 
 import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
 import com.google.api.client.util.Throwables;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.*;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -25,7 +22,7 @@ import java.util.concurrent.Semaphore;
 
 
 public final class VerifyReceiver implements VerificationCodeReceiver {
-    private static final String LOCALHOST = "localhost";
+    private static final String LOCALHOST = "serveriot-0z1m.onrender.com";
     private static final String CALLBACK_PATH = "/Callback";
     private HttpServer server;
     String code;
@@ -38,7 +35,7 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
     private String failureLandingPageUrl;
 
     public VerifyReceiver() {
-        this("localhost", -1, "/Callback", (String)null, (String)null);
+        this("serveriot-0z1m.onrender.com", -1, "/Callback", (String)null, (String)null);
     }
 
     VerifyReceiver(String host, int port, String successLandingPageUrl, String failureLandingPageUrl) {
@@ -55,7 +52,7 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
     }
 
     public String getRedirectUri() throws IOException {
-        this.server = HttpServer.create(new InetSocketAddress(this.port != -1 ? this.port : this.findOpenPort()), 0);
+        this.server = HttpsServer.create(new InetSocketAddress(this.port != -1 ? this.port : this.findOpenPort()), 0);
         HttpContext context = this.server.createContext(this.callbackPath, new CallbackHandler());
         this.server.setExecutor((Executor)null);
 
@@ -68,7 +65,7 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
             throw new IOException(var3);
         }
 
-        return "http://" + this.getHost() + ":" + this.port + this.callbackPath;
+        return "https://" + this.getHost() + this.callbackPath;
     }
 
     private int findOpenPort() {
@@ -228,7 +225,7 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
     }
 
     public static final class Builder {
-        private String host = "localhost";
+        private String host = "serveriot-0z1m.onrender.com";
         private int port = -1;
         private String successLandingPageUrl;
         private String failureLandingPageUrl;
