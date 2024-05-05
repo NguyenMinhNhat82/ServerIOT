@@ -105,6 +105,7 @@ public class StationController {
         return  new ResponseEntity<>(sensorValueService.getMinMaxOfSenSortInStation(req.get("date"),station), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping("/export")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");

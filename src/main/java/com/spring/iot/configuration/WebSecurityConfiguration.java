@@ -32,12 +32,12 @@ public class WebSecurityConfiguration {
                 .requestMatchers( "/Callback?**","/authenticate", "/sign-up","/hello","/checkusername/",
                         "/ws/**","/expirationOfToken/**","/refreshtoken/**","/generateOtp"
                         ,"/token-sign-up","/generateOtp","/validateOtp","/admin-authenticate","/api/user/test"
-                ,"/sensor-value/export/excel", "/test", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                ,"/sensor-value/export/excel", "/test", "/swagger-ui/**", "/v3/api-docs/**","/export").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/api/**","/data")
                 .authenticated()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/user/**", "/api/all-min-max/{stationId}", "/export").hasAnyAuthority("ADMIN")
+                .authorizeHttpRequests().requestMatchers("/api/user/**", "/api/all-min-max/{stationId}").hasAnyAuthority("ADMIN")
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
