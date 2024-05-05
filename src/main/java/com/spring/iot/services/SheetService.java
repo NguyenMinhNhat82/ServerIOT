@@ -5,7 +5,6 @@ import ch.qos.logback.classic.net.server.ServerSocketReceiver;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -61,7 +60,8 @@ public class SheetService {
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        VerifyReceiver receiver = new VerifyReceiver.Builder().setHost("serveriot-0z1m.onrender.com").setCallbackPath("/test").build();
+//        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        VerifyReceiver receiver = new VerifyReceiver.Builder().setPort(8888).build();
 
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
