@@ -9,6 +9,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiv
 import com.google.api.client.util.Throwables;
 import com.sun.net.httpserver.*;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -24,7 +25,7 @@ import java.util.concurrent.Semaphore;
 public final class VerifyReceiver implements VerificationCodeReceiver {
     private static final String LOCALHOST = "serveriot-0z1m.onrender.com";
     private static final String CALLBACK_PATH = "/Callback";
-    private HttpServer server;
+    private HttpsServer server;
     String code;
     String error;
     final Semaphore waitUnlessSignaled;
@@ -53,7 +54,7 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
 
     public String getRedirectUri() throws IOException {
         this.server = HttpsServer.create(new InetSocketAddress(this.port != -1 ? this.port : this.findOpenPort()), 0);
-        HttpContext context = this.server.createContext(this.callbackPath, new CallbackHandler());
+        this.server.createContext(this.callbackPath, new CallbackHandler());
         this.server.setExecutor((Executor)null);
 
         try {
