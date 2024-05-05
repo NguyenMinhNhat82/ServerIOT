@@ -65,7 +65,7 @@ public final class VerifyReceiver implements VerificationCodeReceiver {
             throw new IOException(var3);
         }
 
-        return "https://" + this.getHost() + this.callbackPath;
+        return "https://" + this.getHost() + ":" + port + this.callbackPath;
     }
 
     private int findOpenPort() {
