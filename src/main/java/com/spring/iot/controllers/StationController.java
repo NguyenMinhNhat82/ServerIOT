@@ -2,6 +2,7 @@ package com.spring.iot.controllers;
 
 
 import com.spring.iot.dto.CurrentResponse;
+import com.spring.iot.dto.HistoryDataResponse;
 import com.spring.iot.dto.MinMaxAllSensorResponse;
 import com.spring.iot.dto.MinMaxResponse;
 import com.spring.iot.entities.Sensor;
@@ -124,6 +125,11 @@ public class StationController {
         ExcelService excelExporter = new ExcelService(listValue,stations,sensors);
 
         excelExporter.export(response);
+    }
+
+    @GetMapping("/api/history-of-sensor/{sensorId}")
+    public ResponseEntity<HistoryDataResponse> historyDataResponse(@PathVariable("sensorId") String sensorId){
+        return  new ResponseEntity<>(sensorValueService.getAllHistoryDataOfSensor(sensorId), HttpStatus.OK);
     }
 
 

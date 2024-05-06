@@ -34,4 +34,12 @@ public interface SensorValueRepository extends JpaRepository<SensorValue,Integer
             @Param("idSensor") String idSensor,
             @Param("hour") String hour);
 
+
+    @Query(nativeQuery = true,
+            value = "SELECT *  FROM public.sensor_value\n" +
+                    "where EXTRACT(EPOCH FROM (timezone('Asia/Saigon', CURRENT_TIMESTAMP) - public.sensor_value.time_update)) <=:time \n" +
+                    "and sensor_id = :idSensor \n" +
+                    "ORDER BY public.sensor_value.time_update ASC ")
+    List<SensorValue> getSensorValueByBetweenTime(@Param("idSensor") String idSensor ,@Param("time") Integer time);
+
 }

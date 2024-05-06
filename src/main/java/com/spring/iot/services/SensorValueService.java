@@ -1,6 +1,7 @@
 package com.spring.iot.services;
 
 import com.spring.iot.dto.CurrentResponse;
+import com.spring.iot.dto.HistoryDataResponse;
 import com.spring.iot.dto.MinMaxAllSensorResponse;
 import com.spring.iot.dto.MinMaxResponse;
 import com.spring.iot.entities.Sensor;
@@ -340,6 +341,13 @@ public class SensorValueService {
             }
         }
         return new MinMaxAllSensorResponse(sensorMinMaxes);
+    }
+    public HistoryDataResponse getAllHistoryDataOfSensor(String idSensor){
+        List<SensorValue> values1h = sensorValueRepository.getSensorValueByBetweenTime(idSensor, 3600);
+        List<SensorValue> values1d = sensorValueRepository.getSensorValueByBetweenTime(idSensor, 86400);
+        List<SensorValue> values1w = sensorValueRepository.getSensorValueByBetweenTime(idSensor, 604800);
+        List<SensorValue> values1m = sensorValueRepository.getSensorValueByBetweenTime(idSensor, 2678400);
+        return  new HistoryDataResponse(values1h,values1d,values1w,values1m);
     }
 
 
