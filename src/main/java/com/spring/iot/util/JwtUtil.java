@@ -87,7 +87,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*2))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*2*60))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
