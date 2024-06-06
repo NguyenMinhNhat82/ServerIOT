@@ -121,6 +121,9 @@ public class MqttBeans {
                         Map<String,Object> result =
                                 new ObjectMapper().readValue(myjson.get(0).toString(), HashMap.class);
                         Station getStation = stationService.findStattionByID(result.get("station_id").toString());
+                        if(getStation == null)
+                            getStation = new Station();
+                        getStation.setId(result.get("station_id").toString());
                         getStation.setName(result.get("station_name").toString());
                         getStation.setActive(true);
                         listStationInJSON.add(getStation);
@@ -132,6 +135,11 @@ public class MqttBeans {
                         for(int j =0 ; j < sensor.size();j++){
                             Map<String,String> obj = new HashMap<>((Map) sensor.get(j)) ;
                             Sensor s = sensorService.findSensorByID(obj.get("id"));
+                            if(s==null){
+                                s = new Sensor();
+                                s.setId(obj.get("id"));
+                            }
+                            s.setStation(stationService.findStattionByID(station.getId()));
                             sensorService.addOrUpdate(s);
 
                             ZoneId zid = ZoneId.of("Asia/Saigon");

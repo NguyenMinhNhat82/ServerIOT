@@ -29,7 +29,7 @@ public class IotApplication {
     @Scheduled(fixedRate = 1000*60*2)
     public synchronized void keepServerAlive() throws GeneralSecurityException, IOException {
         RestTemplate restTemplate = new RestTemplate();
-        String url =  "https://serveriot-0z1m.onrender.com/test";
+        String url =  "https://serveriot-ob37.onrender.com/test";
         //http://localhost:9000
 
         //https://serveriot-1.onrender.com/test
