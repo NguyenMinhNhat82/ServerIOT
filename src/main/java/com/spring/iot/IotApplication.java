@@ -62,23 +62,23 @@ public class IotApplication {
     public synchronized void autoGenerateNumber() throws GeneralSecurityException, IOException {
         ZoneId zid = ZoneId.of("Asia/Saigon");
         Random random = new Random();
-        SensorValue sensorValue1 = new SensorValue(0,String.valueOf(random.nextInt(11) + 20),
+        SensorValue sensorValue1 = new SensorValue(0,String.valueOf(random.nextFloat(11) + 20),
                 LocalDateTime.now(zid),sensorService.findSensorByID("temp_0001"));
-        SensorValue sensorValue2 = new SensorValue(0,String.valueOf(random.nextInt(21) + 60),
+        SensorValue sensorValue2 = new SensorValue(0,String.valueOf(random.nextFloat(21) + 60),
                 LocalDateTime.now(zid),sensorService.findSensorByID("humi_0001"));
-        SensorValue sensorValue3 = new SensorValue(0,String.valueOf(random.nextInt(11) + 20),
+        SensorValue sensorValue3 = new SensorValue(0,String.valueOf(random.nextFloat(11) + 20),
                 LocalDateTime.now(zid),sensorService.findSensorByID("temp_0002"));
-        SensorValue sensorValue4 = new SensorValue(0,String.valueOf(random.nextInt(21) + 60),
+        SensorValue sensorValue4 = new SensorValue(0,String.valueOf(random.nextFloat(21) + 60),
                 LocalDateTime.now(zid),sensorService.findSensorByID("humi_0002"));
-        SensorValue sensorValue5 = new SensorValue(0,String.valueOf(random.nextInt(17) + 4),
+        SensorValue sensorValue5 = new SensorValue(0,String.valueOf(random.nextFloat(17) + 4),
                 LocalDateTime.now(zid),sensorService.findSensorByID("ph_0002"));
-        SensorValue sensorValue6 = new SensorValue(0,String.valueOf(random.nextInt(11)),
+        SensorValue sensorValue6 = new SensorValue(0,String.valueOf(random.nextFloat(11)),
                 LocalDateTime.now(zid),sensorService.findSensorByID("EC_0002"));
-        SensorValue sensorValue7 = new SensorValue(0,String.valueOf(random.nextInt(21)),
+        SensorValue sensorValue7 = new SensorValue(0,String.valueOf(random.nextFloat(21)),
                 LocalDateTime.now(zid),sensorService.findSensorByID("Nito_0002"));
-        SensorValue sensorValue8 = new SensorValue(0,String.valueOf(random.nextInt(30)),
+        SensorValue sensorValue8 = new SensorValue(0,String.valueOf(random.nextFloat(30)),
                 LocalDateTime.now(zid),sensorService.findSensorByID("Photpho_0002"));
-        SensorValue sensorValue9 = new SensorValue(0,String.valueOf(random.nextInt(15)),
+        SensorValue sensorValue9 = new SensorValue(0,String.valueOf(random.nextFloat(15)),
                 LocalDateTime.now(zid),sensorService.findSensorByID("Kali_0002"));
         SensorValue sensorValue10 = new SensorValue(0,"true",
                 LocalDateTime.now(zid),sensorService.findSensorByID("Relay_0001"));
