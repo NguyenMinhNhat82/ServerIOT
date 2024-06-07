@@ -16,6 +16,14 @@ public class MinMaxAllSensorResponse {
         this.sensorMinMaxes = sensorMinMaxes;
     }
 
+    public List<SensorMinMax> getSensorMinMaxes() {
+        return sensorMinMaxes;
+    }
+
+    public void setSensorMinMaxes(List<SensorMinMax> sensorMinMaxes) {
+        this.sensorMinMaxes = sensorMinMaxes;
+    }
+
     public static class SensorMinMax {
         private String sensor;
         List<ValueHour> data;
