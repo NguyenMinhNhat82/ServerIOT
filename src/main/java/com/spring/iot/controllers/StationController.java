@@ -1,10 +1,7 @@
 package com.spring.iot.controllers;
 
 
-import com.spring.iot.dto.CurrentResponse;
-import com.spring.iot.dto.HistoryDataResponse;
-import com.spring.iot.dto.MinMaxAllSensorResponse;
-import com.spring.iot.dto.MinMaxResponse;
+import com.spring.iot.dto.*;
 import com.spring.iot.entities.Sensor;
 import com.spring.iot.entities.SensorValue;
 import com.spring.iot.entities.Station;
@@ -131,6 +128,28 @@ public class StationController {
     public ResponseEntity<HistoryDataResponse> historyDataResponse(@PathVariable("sensorId") String sensorId){
         return  new ResponseEntity<>(sensorValueService.getAllHistoryDataOfSensor(sensorId), HttpStatus.OK);
     }
+
+    @GetMapping("/api/all-station-and-sensor")
+    public ResponseEntity<StationAndSensorResponse> getAllStationAndSensor(){
+        return new ResponseEntity<>(sensorService.getAllStatInAndSensor(), HttpStatus.OK);
+    }
+    @GetMapping("/api/station/in-active/{idStation}")
+    public ResponseEntity<String> inActiveStation(@PathVariable("idStation") String idStation){
+        return new ResponseEntity<>(stationService.inActiveStaion(idStation), HttpStatus.OK);
+    }
+    @GetMapping("/api/station/active/{idStation}")
+    public ResponseEntity<String> activeStation(@PathVariable("idStation") String idStation){
+        return new ResponseEntity<>(stationService.activeStaion(idStation), HttpStatus.OK);
+    }
+    @GetMapping("/api/sensor/avtive/{idSensor}")
+    public ResponseEntity<String> activeSensor(@PathVariable("idSensor") String idSensor){
+        return new ResponseEntity<>(sensorService.activeSensor(idSensor), HttpStatus.OK);
+    }
+    @GetMapping("/api/sensor/in-avtive/{idSensor}")
+    public ResponseEntity<String> inActiveSensor(@PathVariable("idSensor") String idSensor){
+        return new ResponseEntity<>(sensorService.inActiveSensor(idSensor), HttpStatus.OK);
+    }
+
 
 
 

@@ -13,6 +13,7 @@ import java.util.Set;
 public class Sensor {
     @Id
     private String id;
+    private Boolean active;
 
 
 

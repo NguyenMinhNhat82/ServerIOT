@@ -88,7 +88,7 @@ public class MqttBeans {
     public MessageProducer inbound() {
         try {
             MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn",
-                    mqttClientFactory(), "/innovation/airmonitoring/NBIOTs");
+                    mqttClientFactory(), "/innovation/airmonitoring/NBIOS_Copy");
             adapter.setCompletionTimeout(5000);
             adapter.setConverter(new DefaultPahoMessageConverter());
             adapter.setQos(2);
@@ -134,19 +134,32 @@ public class MqttBeans {
                         Set<Sensor> sensors = new HashSet<>();
                         for(int j =0 ; j < sensor.size();j++){
                             Map<String,String> obj = new HashMap<>((Map) sensor.get(j)) ;
+                            String isActive = obj.get("isActive");
                             Sensor s = sensorService.findSensorByID(obj.get("id"));
+
                             if(s==null){
                                 s = new Sensor();
                                 s.setId(obj.get("id"));
                             }
-                            s.setStation(stationService.findStattionByID(station.getId()));
-                            sensorService.addOrUpdate(s);
+                            if(String.valueOf(isActive).equals("1")){
 
-                            ZoneId zid = ZoneId.of("Asia/Saigon");
-                            SensorValue sensorValue = new SensorValue(0,String.valueOf(obj.get("value")),
-                                    LocalDateTime.now(zid),s);
+                                s.setStation(stationService.findStattionByID(station.getId()));
+                                s.setActive(true);
+                                sensorService.addOrUpdate(s);
+                                ZoneId zid = ZoneId.of("Asia/Saigon");
+                                SensorValue sensorValue = new SensorValue(0,String.valueOf(obj.get("value")),
+                                        LocalDateTime.now(zid),s);
+
+                                sensorValueService.addOrUpdate(sensorValue);
+
 //                            Sensor s = new Sensor(obj.get("id"), String.valueOf(obj.get("value")),station);
-                            sensorValueService.addOrUpdate(sensorValue);
+
+                            }
+                            else{
+                                s.setActive(false);
+                            }
+
+
                         }
                         stationService.setNonActiveForStation(listStationInJSON);
 //                        sheetService.update();
