@@ -87,7 +87,7 @@ public class SensorService {
     public  List<Sensor> getAll(){
         return sensorRepository.findAll();
     }
-    private String urlFetch  = "http://localhost:9001/";
+    private String urlFetch  = "https://iotcontroller-7923.onrender.com/";
     public String activeSensor(String idSensor) {
         try {
             RestTemplate restTemplate = new RestTemplate();
