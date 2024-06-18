@@ -104,15 +104,25 @@ public class CurrentResponse {
         private String value;
         private Integer state;
         private String changeValue;
+        private Boolean active;
 
-        public ValueOfSensor(String name, String value, Integer state, String changeValue) {
+        public ValueOfSensor(String name, String value, Integer state, String changeValue,Boolean active) {
             this.name = name;
             this.value = value;
             this.state = state;
             this.changeValue = changeValue;
+            this.active = active;
         }
 
         public ValueOfSensor() {
+        }
+
+        public Boolean getActive() {
+            return active;
+        }
+
+        public void setActive(Boolean active) {
+            this.active = active;
         }
 
         public String getName() {

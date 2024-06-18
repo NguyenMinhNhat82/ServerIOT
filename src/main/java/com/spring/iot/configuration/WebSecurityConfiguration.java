@@ -32,13 +32,14 @@ public class WebSecurityConfiguration {
                 .requestMatchers( "/Callback?**","/authenticate", "/sign-up","/hello","/checkusername/",
                         "/ws/**","/expirationOfToken/**","/refreshtoken/**","/generateOtp"
                         ,"/token-sign-up","/generateOtp","/validateOtp","/admin-authenticate","/api/user/test"
-                ,"/sensor-value/export/excel", "/test", "/swagger-ui/**", "/v3/api-docs/**","/export").permitAll()
+                ,"/sensor-value/export/excel", "/test", "/swagger-ui/**", "/v3/api-docs/**","/export" ,"/api/sensor/dataByMonthAndWeek/{idStation}", "/api/sensor/dataByWeek/{idStation}").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/api/**","/data")
                 .authenticated()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/api/user/**", "/api/all-min-max/{stationId}","/api/all-station-and-sensor", "/api/station/in-active/{stationId}"
-                ,"/api/station/active/{idStation}", "/api/sensor/in-avtive/{idSensor}", "/api/sensor/avtive/{idSensor}").hasAnyAuthority("ADMIN")
+                ,"/api/station/active/{idStation}", "/api/sensor/in-avtive/{idSensor}", "/api/sensor/avtive/{idSensor}","/api/sensor/average/**","/api/notification/**"
+                ,"/api/sensor/schedule-inactive","/api/sensor/cancel-schedule/{idSensor}/{taskID}","/api/sensor/edit-schedule-inactive/{taskID}","/api/sensor/get-index").hasAnyAuthority("ADMIN")
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +16,8 @@ public class Sensor {
     @Id
     private String id;
     private Boolean active;
+    private Boolean isSchedule;
+    private LocalDateTime timeSchedule;
 
 
 
@@ -26,6 +30,41 @@ public class Sensor {
     private Set<SensorValue> sensorValues = new HashSet<>();
 
 
+    private Integer taskID ;
+
+
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Boolean getSchedule() {
+        return isSchedule;
+    }
+
+    public void setSchedule(Boolean schedule) {
+        isSchedule = schedule;
+    }
+
+    public LocalDateTime getTimeSchedule() {
+        return timeSchedule;
+    }
+
+    public void setTimeSchedule(LocalDateTime timeSchedule) {
+        this.timeSchedule = timeSchedule;
+    }
+
+    public Integer getTaskID() {
+        return taskID;
+    }
+
+    public void setTaskID(Integer taskID) {
+        this.taskID = taskID;
+    }
 
     public String getId() {
         return id;

@@ -3,6 +3,7 @@ package com.spring.iot.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.iot.dto.Status;
+import com.spring.iot.entities.Notification;
 import com.spring.iot.entities.Sensor;
 import com.spring.iot.entities.SensorValue;
 import com.spring.iot.entities.Station;
@@ -55,6 +56,8 @@ public class MqttBeans {
 
     @Autowired
     private SensorValueService sensorValueService;
+
+
 
     @Autowired
     private SheetService sheetService;
@@ -141,6 +144,16 @@ public class MqttBeans {
                                 s = new Sensor();
                                 s.setId(obj.get("id"));
                             }
+                            else {
+                                if (s.getSchedule() == null){
+                                    s.setIsSchedule(false);
+                                }
+                                else {
+                                    s.setIsSchedule(s.getIsSchedule());
+                                }
+                                s.setTaskID(s.getTaskID());
+                                s.setTimeSchedule(s.getTimeSchedule());
+                            }
                             if(String.valueOf(isActive).equals("1")){
 
                                 s.setStation(stationService.findStattionByID(station.getId()));
@@ -150,13 +163,21 @@ public class MqttBeans {
                                 SensorValue sensorValue = new SensorValue(0,String.valueOf(obj.get("value")),
                                         LocalDateTime.now(zid),s);
 
-                                sensorValueService.addOrUpdate(sensorValue);
+                               SensorValue value =  sensorValueService.addOrUpdate(sensorValue);
+                               Double v = value.getSensor().getId().contains("Relay")?0.0:Double.parseDouble(value.getValue());
+                               sensorService.checkToNotify(value.getSensor().getId(),v, LocalDateTime.now(zid));
 
 //                            Sensor s = new Sensor(obj.get("id"), String.valueOf(obj.get("value")),station);
 
                             }
                             else{
                                 s.setActive(false);
+                                s.setTaskID(null);
+                                s.setIsSchedule(false);
+                                if(s.getTaskID() != null ){
+                                    if( s.getTaskID()!= 0 )
+                                        sensorService.cancelScheduledTask(s.getTaskID(), s.getId());
+                                }
                             }
 
 

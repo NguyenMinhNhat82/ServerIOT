@@ -17,7 +17,7 @@ public class SensorValue {
 
     @Column(name = "time_update")
     private LocalDateTime timeUpdate;
-        
+
     @ManyToOne
     @JoinColumn(name = "sensor_id")
     private Sensor sensor;

@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -149,6 +152,94 @@ public class StationController {
     public ResponseEntity<String> inActiveSensor(@PathVariable("idSensor") String idSensor){
         return new ResponseEntity<>(sensorService.inActiveSensor(idSensor), HttpStatus.OK);
     }
+
+    @GetMapping("/api/sensor/average/{idSensor}")
+    public ResponseEntity<AverageValueResponse> getAverageOfSensor(@PathVariable("idSensor") String idSensor){
+        return new ResponseEntity<>(sensorValueService.averageValueResponse(idSensor), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/sensor/schedule-inactive")
+    public ResponseEntity<String> scheduleInActive(@RequestBody ScheduleRequest scheduleRequest){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        if(scheduleRequest.getTime() != null && !scheduleRequest.getTime().isEmpty()){
+            LocalTime parsedTime = LocalTime.parse(scheduleRequest.getTime(), formatter);
+            LocalDateTime now  = LocalDateTime.now();
+            LocalDateTime timeToSchedule =  now.withHour(parsedTime.getHour()).withMinute(parsedTime.getMinute()).withSecond(0).withNano(0);
+           if(timeToSchedule.isBefore(now)){
+               timeToSchedule = timeToSchedule.plusDays(1);
+           }
+           try {
+               sensorService.scheduleTimeToInactive(timeToSchedule, scheduleRequest.getIdSensor());
+               return new ResponseEntity<>("Success", HttpStatus.OK);
+
+           }
+           catch (Exception ex){
+               return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
+
+           }
+
+        }
+        else
+            return new ResponseEntity<>("Time can be blank", HttpStatus.OK);
+    }
+
+    @PostMapping("/api/sensor/edit-schedule-inactive/{taskID}")
+    public ResponseEntity<String> editScheduleInActive(@RequestBody ScheduleRequest scheduleRequest,
+                                                       @PathVariable("taskID") Integer taskID){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        if(scheduleRequest.getTime() != null && !scheduleRequest.getTime().isEmpty()){
+            LocalTime parsedTime = LocalTime.parse(scheduleRequest.getTime(), formatter);
+            LocalDateTime now  = LocalDateTime.now();
+            LocalDateTime timeToSchedule =  now.withHour(parsedTime.getHour()).withMinute(parsedTime.getMinute()).withSecond(0).withNano(0);
+            if(timeToSchedule.isBefore(now)){
+                timeToSchedule = timeToSchedule.plusDays(1);
+            }
+            try {
+                sensorService.editScheduledTask(taskID,timeToSchedule, scheduleRequest.getIdSensor());
+                return new ResponseEntity<>("Success", HttpStatus.OK);
+
+            }
+            catch (Exception ex){
+                return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
+
+            }
+
+        }
+        else
+            return new ResponseEntity<>("Time can be blank", HttpStatus.OK);
+    }
+
+    @GetMapping("/api/sensor/cancel-schedule/{idSensor}/{taskID}")
+    public ResponseEntity<String> cancelSchedule(@PathVariable("idSensor") String idSensor,
+                                                 @PathVariable("taskID") Integer taskId){
+        return new ResponseEntity<>(sensorService.cancelScheduledTask(taskId,idSensor), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/sensor/dataByMonthAndWeek/{idStation}")
+    public ResponseEntity<MinMaxSensorByMonth> getDataByMonthAndWeek(
+            @RequestParam int year,
+            @RequestParam int month,
+            @PathVariable("idStation") String idStation) {
+        return new ResponseEntity<>(sensorValueService.getMinAndMaxValueInAllWeekByMonth(year, month,idStation), HttpStatus.OK);
+    }
+    @GetMapping("/api/sensor/dataByWeek/{idStation}")
+    public ResponseEntity<MinMaxSensorByWeek> getDataByWeekAndDay(
+            @RequestParam int year,
+            @RequestParam int month,
+            @RequestParam int index,
+            @PathVariable("idStation") String idStation) {
+        return new ResponseEntity<>(sensorValueService.getMinAndMaxValueInAllWeekByWeek(year, month,idStation,index), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/sensor/get-index")
+    public ResponseEntity<Integer> getIndex(
+            @RequestParam int year,
+            @RequestParam int month){
+        return new ResponseEntity<>(sensorValueService.getAllWeeksInMonth(month,year).size(), HttpStatus.OK);
+    }
+
+
+
 
 
 

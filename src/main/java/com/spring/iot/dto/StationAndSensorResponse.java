@@ -2,6 +2,7 @@ package com.spring.iot.dto;
 
 import com.spring.iot.entities.SensorValue;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class StationAndSensorResponse {
@@ -74,10 +75,40 @@ public class StationAndSensorResponse {
             private String idSensor;
 
             private Boolean active;
+            private Boolean isSchedule;
+            private Integer taskID;
+            private LocalDateTime timeSchedule;
 
-            public SensorData(String idSensor, String sensorName, Boolean active) {
+            public Boolean getSchedule() {
+                return isSchedule;
+            }
+
+            public void setSchedule(Boolean schedule) {
+                isSchedule = schedule;
+            }
+
+            public Integer getTaskID() {
+                return taskID;
+            }
+
+            public void setTaskID(Integer taskID) {
+                this.taskID = taskID;
+            }
+
+            public LocalDateTime getTimeSchedule() {
+                return timeSchedule;
+            }
+
+            public void setTimeSchedule(LocalDateTime timeSchedule) {
+                this.timeSchedule = timeSchedule;
+            }
+
+            public SensorData(String idSensor, Boolean active, Boolean isSchedule, Integer taskID, LocalDateTime timeSchedule) {
                 this.idSensor = idSensor;
                 this.active = active;
+                this.isSchedule = isSchedule;
+                this.taskID = taskID;
+                this.timeSchedule = timeSchedule;
             }
 
             public SensorData() {
