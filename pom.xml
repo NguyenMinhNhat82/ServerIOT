@@ -202,7 +202,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
             <configuration>
-                <mainClass>com.spring.iot</mainClass>
+                <mainClass>com.spring.iot.IotApplication</mainClass>
                 <!-- Replace 'com.example.YourApplicationClassName' with your actual main application class -->
             </configuration>
             <executions>
