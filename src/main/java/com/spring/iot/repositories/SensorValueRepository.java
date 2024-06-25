@@ -56,4 +56,11 @@ public interface SensorValueRepository extends JpaRepository<SensorValue,Integer
             "AND MONTH(sv.timeUpdate) = :month " +
             "GROUP BY YEAR(sv.timeUpdate), MONTH(sv.timeUpdate), WEEK(sv.timeUpdate)")
     List<Map<String, Object>> getDataByMonthGroupByWeek(@Param("year") int year, @Param("month") int month);
+
+    @Query("SELECT sv FROM SensorValue sv " +
+            "WHERE sv.sensor = :sensor " +
+            "AND sv.timeUpdate >= :startTime " +
+            "ORDER BY sv.timeUpdate DESC")
+    List<SensorValue> findLatestBySensorAndTimeUpdate(@Param("sensor") Sensor sensor,
+                                                      @Param("startTime") LocalDateTime startTime);
 }

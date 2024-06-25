@@ -25,7 +25,7 @@ public class StationService {
     @Autowired
     private SensorRepository sensorRepository;
 
-    private String urlFetch  = "https://iotcontroller-7923.onrender.com/";
+    private String urlFetch  = "https://iotcontroller-wfbx.onrender.com/";
 
     public Station addOrUpdate(Station station){
         return stationRepository.save(station);
@@ -36,7 +36,7 @@ public class StationService {
         return stationRepository.findStationById(id);
     }
     public List<Station> getAllStation(){
-        return stationRepository.getStationsByActive(true);
+        return stationRepository.findAll();
     }
     public  List<Station> allListStaion(){
         return this.stationRepository.findAll();

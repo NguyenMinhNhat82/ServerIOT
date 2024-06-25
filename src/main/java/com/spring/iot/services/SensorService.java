@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -87,7 +86,7 @@ public class SensorService {
     public  List<Sensor> getAll(){
         return sensorRepository.findAll();
     }
-    private String urlFetch  = "https://iotcontroller-7923.onrender.com/";
+    private String urlFetch  = "https://iotcontroller-wfbx.onrender.com/";
     public String activeSensor(String idSensor) {
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -245,119 +244,80 @@ public class SensorService {
             return ex.getMessage();
         }
     }
-    public void checkToNotify(String idSensor,Double value, LocalDateTime time){
+    public void checkToNotify(String idSensor, Double value, LocalDateTime time, List<SensorValue> listToCheck){
         String  typeSensor = idSensor.split("_")[0];
         String content = "";
         String state = "";
         switch (typeSensor){
             case "temp":
-                if(value>= 20  && value <20.4){
+                Boolean isNotify = true;
+                if(value>= 20  && value <22){
+
+                    for (SensorValue sensorValue : listToCheck){
+                        Double dataSensor= 0.0;
+                        if(sensorValue.getSensor().getId().contains("Relay")) continue;
+                        dataSensor = Double.parseDouble(sensorValue.getValue());
+                        if(dataSensor >22)
+                        {
+                            isNotify = false;
+                            break;
+                        }
+                    }
                     //low
                     content = "Nhiệt độ của máy cảm biến " + idSensor+" quá thấp";
                     state = "Low";
                 }
-                if (value >=21 && value <22){
-                    //high
-                    content = "Nhiệt độ của máy cảm biến " + idSensor+" khá cao";
-                    state = "High";
-                }
-                if(value >=22){
+
+                if(value >=36.5){
+                    for (SensorValue sensorValue : listToCheck){
+                        Double dataSensor= 0.0;
+                        if(sensorValue.getSensor().getId().contains("Relay")) continue;
+                        dataSensor = Double.parseDouble(sensorValue.getValue());
+                        if(dataSensor <36.5)
+                        {
+                            isNotify = false;
+                            break;
+                        }
+                    }
                     //very high
                     content = "Nhiệt độ của máy cảm biến " + idSensor+" quá cao";
                     state = "Very high";
                 }
                 break;
-            case "humi" :
-                if(value>= 60  && value <61){
-                    //low
-                    content = "Độ ẩm của máy cảm biến " + idSensor+" quá thấp";
-                    state = "Low";
-                }
-
-                if (value >=63 && value <64){
-                    //high
-                    content = "Độ ẩm của máy cảm biến " + idSensor+" khá cao";
-                    state = "High";
-                }
-                if(value >=64){
-                    //very high
-                    content = "Độ ẩm của máy cảm biến " + idSensor+" quá cao";
-                    state = "very high";
-                }
-                break;
             case "ph":
-                if(value>=7  && value <7.3){
+                if(value>=5  && value <5.5){
+                    for (SensorValue sensorValue : listToCheck){
+                        Double dataSensor= 0.0;
+                        if(sensorValue.getSensor().getId().contains("Relay")) continue;
+                        dataSensor = Double.parseDouble(sensorValue.getValue());
+                        if(dataSensor >5.5)
+                        {
+                            isNotify = false;
+                            break;
+                        }
+                    }
                     //low
                     content = "Nổng độ PH của máy cảm biến " + idSensor+" quá thấp";
                     state = "Low";
                 }
 
-                if (value >8 && value <10){
-                    //high
-                    content = "Nồng độ PH của máy cảm biến " + idSensor+" khá cao";
-                    state = "High";
-                }
-                if(value >=10){
+                if(value >=7.5){
+                    for (SensorValue sensorValue : listToCheck){
+                        Double dataSensor= 0.0;
+                        if(sensorValue.getSensor().getId().contains("Relay")) continue;
+                        dataSensor = Double.parseDouble(sensorValue.getValue());
+                        if(dataSensor <7.5)
+                        {
+                            isNotify = false;
+                            break;
+                        }
+                    }
                     //very high
                     content = "Nồng độ PH của máy cảm biến " + idSensor+" quá cao";
                     state = "Very high";
                 }
                 break;
-            case "EC":
-                if(value>= 3  && value <3.2){
-                    //low
-                    content = "Độ dẫn điện của máy cảm biến " + idSensor+" quá thấp";
-                    state = "Low";
-                }
-                if (value >=4 && value <4.7){
-                    //high
-                    content = "Độ dẫn điện của máy cảm biến " + idSensor+" khá cao";
-                    state = "High";
-                }
-                if(value >=4.7){
-                    //very high
-                    content = "Độ dẫn diện của máy cảm biến " + idSensor+" quá cao";
-                    state = "Very high";
-                }
-                break;
-            case "Photpho":
-                if(value>= 30  && value <35){
-                    //low
-                    content = "Nồng độ Photpho của máy cảm biến " + idSensor+" quá thấp";
-                    state = "Low";
-                }
 
-                if (value >=40 && value <47){
-                    //high
-                    content = "Nồng độ Photpho của máy cảm biến " + idSensor+" khá cao";
-                    state = "High";
-                }
-                if(value >=47){
-                    //very high
-                    content = "Nồng độ Photpho của máy cảm biến " + idSensor+" quá cao";
-                    state = "Very high";
-                }
-
-                break;
-            case "Kali":
-                if(value>= 15  && value <16){
-                    //low
-                    content = "Nồng độ Kali của máy cảm biến " + idSensor+" quá thấp";
-                    state = "Low";
-                }
-
-                if (value >=18 && value <19){
-                    //high
-                    content = "Nồng độ Kali của máy cảm biến " + idSensor+" khá cao";
-                    state = "High";
-                }
-                if(value >=19){
-                    //very high
-                    content = "Nồng độ Kali của máy cảm biến " + idSensor+" quá cao";
-                    state = "High";
-                }
-
-                break;
             default:
                 content  ="";
                 break;

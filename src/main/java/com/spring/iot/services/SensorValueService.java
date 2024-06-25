@@ -672,5 +672,13 @@ public class SensorValueService {
         return  new HistoryDataResponse(values1h,values1d,values1w,values1m);
     }
 
+    public List<SensorValue> findLatestSensorValues(Sensor sensor) {
+        // Calculate the start time for the last 2 hours from now
+        LocalDateTime startTime = LocalDateTime.now().minusHours(2);
+
+        // Call the repository method to fetch SensorValues
+        return sensorValueRepository.findLatestBySensorAndTimeUpdate(sensor, startTime);
+    }
+
 
 }

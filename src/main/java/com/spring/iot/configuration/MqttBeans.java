@@ -126,9 +126,14 @@ public class MqttBeans {
                         Station getStation = stationService.findStattionByID(result.get("station_id").toString());
                         if(getStation == null)
                             getStation = new Station();
+                        String isactive =result.get("active").toString();
+                        if(isactive.equals("1"))
+                            getStation.setActive(true);
+                        else
+                            getStation.setActive(false  );
                         getStation.setId(result.get("station_id").toString());
                         getStation.setName(result.get("station_name").toString());
-                        getStation.setActive(true);
+
                         listStationInJSON.add(getStation);
                         Station station = stationService.addOrUpdate(getStation);
 
@@ -165,7 +170,8 @@ public class MqttBeans {
 
                                SensorValue value =  sensorValueService.addOrUpdate(sensorValue);
                                Double v = value.getSensor().getId().contains("Relay")?0.0:Double.parseDouble(value.getValue());
-                               sensorService.checkToNotify(value.getSensor().getId(),v, LocalDateTime.now(zid));
+                                List<SensorValue> listToCheck = sensorValueService.findLatestSensorValues(s);
+                               sensorService.checkToNotify(value.getSensor().getId(),v, LocalDateTime.now(zid),listToCheck);
 
 //                            Sensor s = new Sensor(obj.get("id"), String.valueOf(obj.get("value")),station);
 
