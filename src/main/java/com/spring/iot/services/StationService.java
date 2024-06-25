@@ -25,7 +25,7 @@ public class StationService {
     @Autowired
     private SensorRepository sensorRepository;
 
-    private String urlFetch  = "https://iotcontroller-wfbx.onrender.com/";
+    private String urlFetch  = "https://iotcontroller-1.onrender.com/";
 
     public Station addOrUpdate(Station station){
         return stationRepository.save(station);
