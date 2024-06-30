@@ -47,7 +47,7 @@ public class IotApplication {
 
     }
 
-    @Scheduled(fixedRate = 1000*60*2)
+    @Scheduled(fixedRate = 1000*60*4)
     public synchronized void keepServerAlive() throws GeneralSecurityException, IOException {
         RestTemplate restTemplate = new RestTemplate();
         String url =  "https://serveriot-tdz2.onrender.com/test";
