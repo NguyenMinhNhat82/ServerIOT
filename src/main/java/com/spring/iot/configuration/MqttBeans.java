@@ -170,7 +170,7 @@ public class MqttBeans {
 
                                SensorValue value =  sensorValueService.addOrUpdate(sensorValue);
                                Double v = value.getSensor().getId().contains("Relay")?0.0:Double.parseDouble(value.getValue());
-                                List<SensorValue> listToCheck = sensorValueService.findLatestSensorValues(s);
+//                                List<SensorValue> listToCheck = sensorValueService.findLatestSensorValues(s);
 //                               sensorService.checkToNotify(value.getSensor().getId(),v, LocalDateTime.now(zid),listToCheck);
 
 //                            Sensor s = new Sensor(obj.get("id"), String.valueOf(obj.get("value")),station);
