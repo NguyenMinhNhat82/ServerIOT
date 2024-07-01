@@ -1,7 +1,6 @@
 package com.spring.iot.services;
 
 import com.spring.iot.dto.StationAndSensorResponse;
-import com.spring.iot.dto.Status;
 import com.spring.iot.entities.Notification;
 import com.spring.iot.entities.Sensor;
 import com.spring.iot.entities.SensorValue;
@@ -12,18 +11,14 @@ import com.spring.iot.repositories.StationRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -32,9 +27,6 @@ import java.util.concurrent.*;
 public class SensorService {
     @Autowired
     SensorRepository sensorRepository;
-
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     StationRepository stationRepository;
@@ -120,10 +112,6 @@ public class SensorService {
             ResponseEntity<String> response
                     = restTemplate.getForEntity(url , String.class);
             if(response.getBody().equals("Success")){
-                Calendar cal = Calendar.getInstance();
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                com.spring.iot.dto.Message m = new com.spring.iot.dto.Message("server", "client", "Update", dateFormat.format(cal.getTime()), Status.MESSAGE);
-                simpMessagingTemplate.convertAndSendToUser(m.getReceiverName(), "/private", m);
                 return "Success";
             }
             else
@@ -247,10 +235,6 @@ public class SensorService {
             ResponseEntity<String> response
                     = restTemplate.getForEntity(url , String.class);
             if(response.getBody().equals("Success")){
-                Calendar cal = Calendar.getInstance();
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                com.spring.iot.dto.Message m = new com.spring.iot.dto.Message("server", "client", "Update", dateFormat.format(cal.getTime()), Status.MESSAGE);
-                simpMessagingTemplate.convertAndSendToUser(m.getReceiverName(), "/private", m);
                 return "Success";
             }
             else
